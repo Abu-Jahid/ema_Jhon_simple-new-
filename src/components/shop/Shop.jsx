@@ -23,7 +23,7 @@ const Shop = () => {
         for (const id in storedCart) {
             //step : 2 get the product by using id
             const addedProduct = products.find(product => product.id === id)
-            console.log(addedProduct);
+            // console.log(addedProduct);
             if (addedProduct) {
                 //step : 3 get quantity of the product
                 const quantity = storedCart[id];
@@ -31,7 +31,7 @@ const Shop = () => {
                 //step : 4 add the added product to the saved cart
                 savedCart.push(addedProduct);
             }
-            console.log('added Product' , addedProduct)
+            // console.log('added Product' , addedProduct)
 
         }
         // step : 5 set the cart
@@ -40,7 +40,20 @@ const Shop = () => {
 
 
     const handleAddToCart = (product) => {
-        const newCart = [...cart, product]
+
+        let newCart = [];
+
+        const exists = cart.find(pd => pd.id === product.id);
+        if(!exists){
+            product.quantity = 1;
+            newCart = [...cart, product]
+        }
+        else{
+            exists.quantity = exists.quantity + 1;
+            const remaining = cart.filter(pd => pd.id !== product.id);
+            newCart = [...remaining, exists]
+        }
+
         setCart(newCart);
         addToDb(product.id)
     }
